@@ -7,6 +7,12 @@ import { RevealText } from "@/components/motion/reveal-text";
 import { RevealMedia } from "@/components/motion/reveal-media";
 import { pageMetadata, siteTitle } from "@/lib/seo";
 
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return projects.map(({ slug }) => ({ slug }));
+}
+
 export async function generateMetadata({ params }: PageProps<"/work/[slug]">) {
   const [{ slug }, locale] = await Promise.all([params, getLocale()]);
   const project = projects.find((item) => item.slug === slug);

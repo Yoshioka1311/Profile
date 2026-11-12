@@ -1,40 +1,35 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
-import { checkContactMessage } from "@/app/actions";
+import { useEffect, useRef, useState } from "react";
 import type { copy } from "@/data/content";
-import { contactFields, contactLimits, type ContactField, type ContactResult } from "@/lib/contact";
+import { contactFields, contactLimits, validateContact, type ContactField, type ContactResult } from "@/lib/contact";
 
 const emptyFields = { name: "", email: "", message: "" };
-const initialResult: ContactResult = { status: "idle" };
-
 export function ContactForm({ labels }: { labels: (typeof copy)["en"]["contact"] }) {
   const formRef = useRef<HTMLFormElement>(null);
   const successRef = useRef<HTMLParagraphElement>(null);
   const [values, setValues] = useState(emptyFields);
   const [edited, setEdited] = useState<Partial<Record<ContactField, boolean>>>({});
-  const [result, submit, pending] = useActionState(async (_previous: ContactResult, formData: FormData): Promise<ContactResult> => {
+  const [result, setResult] = useState<ContactResult>({ status: "idle" });
+
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     setEdited({});
-    try {
-      const next = await checkContactMessage(formData);
-      if (next.status === "success") setValues(emptyFields);
-      return next;
-    } catch {
-      return { status: "unavailable" };
-    }
-  }, initialResult);
+    const next = validateContact(new FormData(event.currentTarget));
+    setResult(next);
+    if (next.status === "success") setValues(emptyFields);
+  }
 
   useEffect(() => {
-    if (pending) return;
     if (result.status === "invalid") {
       const first = contactFields.find((field) => result.errors[field]);
       if (first) formRef.current?.querySelector<HTMLElement>(`#contact-${first}`)?.focus();
     }
     if (result.status === "success") successRef.current?.focus();
-  }, [pending, result]);
+  }, [result]);
 
   return (
-    <form ref={formRef} action={submit} noValidate aria-describedby="contact-preview-note" aria-busy={pending} className="contact-form">
+    <form ref={formRef} onSubmit={submit} noValidate aria-describedby="contact-preview-note" className="contact-form">
       {contactFields.map((field) => {
         const id = `contact-${field}`;
         const error = !edited[field] && result.status === "invalid" ? result.errors[field] : undefined;
@@ -44,7 +39,7 @@ export function ContactForm({ labels }: { labels: (typeof copy)["en"]["contact"]
           value: values[field],
           placeholder: " ",
           maxLength: contactLimits[field],
-          readOnly: pending,
+          readOnly: false,
           required: true,
           "aria-invalid": error ? true : undefined,
           "aria-describedby": error ? `${id}-error` : undefined,
@@ -68,21 +63,18 @@ export function ContactForm({ labels }: { labels: (typeof copy)["en"]["contact"]
         );
       })}
 
-      <button className="wipe-button contact-submit" type="submit" disabled={pending}>
-        <span>{pending ? labels.sending : labels.submit}</span>
-        {pending
-          ? <span className="contact-spinner" aria-hidden="true" />
-          : <span aria-hidden="true">↗</span>}
+      <button className="wipe-button contact-submit" type="submit">
+        <span>{labels.submit}</span>
+        <span aria-hidden="true">↗</span>
       </button>
 
       <div role="status">
-        {!pending && result.status === "success" && (
+        {result.status === "success" && (
           <p ref={successRef} tabIndex={-1} className="contact-success">
             <span aria-hidden="true">✓</span> {labels.success}
           </p>
         )}
       </div>
-      {!pending && result.status === "unavailable" && <p role="alert" className="contact-field-error">{labels.error}</p>}
     </form>
   );
 }

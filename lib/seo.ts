@@ -2,14 +2,16 @@ import "server-only";
 import type { Metadata } from "next";
 import { copy, isPlaceholder, projects, site, type Locale, type Project } from "@/data/content";
 
-function configuredOrigin(): URL | undefined {
+function configuredSiteUrl(): URL | undefined {
   const url = URL.parse(process.env.SITE_URL ?? "");
   if (!url || !["http:", "https:"].includes(url.protocol)) return;
-  if (url.username || url.password || url.pathname !== "/" || url.search || url.hash) return;
+  if (url.username || url.password || url.search || url.hash) return;
   return url;
 }
 
-export const siteOrigin = configuredOrigin();
+export const configuredSiteUrlValue = configuredSiteUrl();
+export const siteOrigin = configuredSiteUrlValue ? new URL(configuredSiteUrlValue.origin) : undefined;
+export const siteBasePath = configuredSiteUrlValue?.pathname.replace(/\/+$/, "") ?? "";
 export const siteIndexable = Boolean(siteOrigin && process.env.SITE_INDEXABLE === "true");
 export const siteRobots: Metadata["robots"] = siteIndexable
   ? { index: true, follow: true }
@@ -42,8 +44,11 @@ export function pageMetadata(
   const description = suppliedDescription.trim() && !isPlaceholder(suppliedDescription)
     ? suppliedDescription
     : labels.seo[typeof route === "object" ? "project" : route];
-  const canonical = siteOrigin ? new URL(pathname, siteOrigin) : undefined;
-  const image = new URL("/share-card", siteOrigin ?? previewOrigin);
+  const localeBasePath = `${siteBasePath}${locale === "th" ? "/th" : ""}`;
+  const routePath = pathname === "/" ? "/" : `${pathname}/`;
+  const canonicalPath = `${localeBasePath}${routePath}`;
+  const canonical = siteOrigin ? new URL(canonicalPath, siteOrigin) : undefined;
+  const image = new URL(`${siteBasePath}/share-card.png`, siteOrigin ?? previewOrigin);
 
   return {
     title,

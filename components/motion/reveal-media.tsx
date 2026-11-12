@@ -3,12 +3,13 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { isLocalImagePath } from "@/lib/media";
+import { publicPath } from "@/lib/public-path";
 import { playAfterOverlay, watchNativeReveal, watchScrollMotion } from "@/lib/scroll-motion";
 
 function MediaImage({ src, alt, sizes, preload }: { src: string; alt: string; sizes: string; preload: boolean }) {
   const [failed, setFailed] = useState(false);
   if (failed) return null;
-  return <Image src={src} alt={alt} fill sizes={sizes} preload={preload} onError={() => setFailed(true)} />;
+  return <Image src={publicPath(src)} alt={alt} fill sizes={sizes} preload={preload} onError={() => setFailed(true)} />;
 }
 
 export function RevealMedia({ src, alt, className = "", sizes = "(max-width: 767px) 100vw, 65vw", preload = false }: { src: string; alt: string; className?: string; sizes?: string; preload?: boolean }) {

@@ -18,7 +18,7 @@ The project entries are ordered Arduino Workbench, HandPrint, and CheckOn. Websi
 
 ## Language controls
 
-Click the circular UK flag for English or Thai flag for Thai. The white ring marks the selected language. Navigation, menu, footer and route headings have both translations. Personal text remains identical placeholders until you enter both translations. The selection persists in the profile-language cookie for one year. The document lang and font change with it. Invalid cookie or submitted values never become a locale.
+Click the circular UK flag for English or Thai flag for Thai. The white ring marks the selected language. Navigation, menu, footer and route headings have both translations. English is served at the repository root and Thai at `/th/`; switching languages keeps the current route when available. The document language and font match each static route.
 
 ## Shared layout and motion
 
@@ -60,11 +60,11 @@ About uses the portrait at `site.home.aboutImage` and the bio, education, experi
 
 Contact reads the email and social links from `site.socials`. Valid addresses become links. Replace the placeholder email to let visitors open an email draft in their own mail app.
 
-The message form runs in preview mode. Its server action checks required fields, email format and length limits. It returns field errors or a confirmation without storing or delivering the message. On an invalid submission, entries stay in the form and focus moves to the first invalid field. Successful validation clears the fields.
+The message form runs in preview mode. Browser-side validation checks required fields, email format and length limits. It returns field errors or a confirmation without storing or delivering the message. On an invalid submission, entries stay in the form and focus moves to the first invalid field. Successful validation clears the fields.
 
 ## Metadata and indexing
 
-Page titles, descriptions and social previews follow the selected language. The two languages share the same URL and the default language is English. The share card is a 1200 × 630 PNG at `/share-card`.
+Page titles, descriptions and social previews follow the selected language. English routes live at the repository root; Thai routes are under `/th/`. The share card is a 1200 × 630 PNG at `/share-card.png`.
 
 Set `SITE_URL` to the public origin, such as `https://portfolio.example.com`, to supply canonical URLs and absolute share image URLs. Set `SITE_INDEXABLE=true` when the public site and content are ready. Before opting in, pages send `noindex, follow` and the sitemap is empty. Opting in lists the public pages and projects in `/sitemap.xml` and links to it from `/robots.txt`.
 
@@ -81,4 +81,4 @@ Test at 360, 768, 1024 and 1440 pixels. Check keyboard access to both flags, a v
 
 ## Deployment
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for the content checklist, Vercel setup, and production checks. The Phase 8 lab reports and before-and-after measurements are in the local outputs folder.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the content checklist, GitHub Pages setup, and production checks. The Phase 8 lab reports and before-and-after measurements are in the local outputs folder.

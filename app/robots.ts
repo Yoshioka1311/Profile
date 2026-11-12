@@ -1,11 +1,11 @@
 import type { MetadataRoute } from "next";
-import { siteIndexable, siteOrigin } from "@/lib/seo";
+import { siteBasePath, siteIndexable, siteOrigin } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: { userAgent: "*", allow: "/" },
-    sitemap: siteIndexable && siteOrigin ? new URL("/sitemap.xml", siteOrigin).href : undefined,
+    sitemap: siteIndexable && siteOrigin ? new URL(`${siteBasePath}/sitemap.xml`, siteOrigin).href : undefined,
   };
 }

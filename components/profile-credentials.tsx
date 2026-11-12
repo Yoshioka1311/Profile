@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { copy, site, type Locale } from "@/data/content";
+import { publicPath } from "@/lib/public-path";
 
 export function ProfileCredentials({ locale, children }: { locale: Locale; children?: ReactNode }) {
   const labels = copy[locale].about;
@@ -16,7 +17,7 @@ export function ProfileCredentials({ locale, children }: { locale: Locale; child
           <p>{education.faculty[locale]}</p>
         </div>
         <a className="education-logo" href={education.url} target="_blank" rel="noreferrer">
-          <Image src={education.logo} alt={`${education.university[locale]} · ${education.faculty[locale]}`} width={768} height={156} sizes="(max-width: 767px) 85vw, 27vw" />
+          <Image src={publicPath(education.logo)} alt={`${education.university[locale]} · ${education.faculty[locale]}`} width={768} height={156} sizes="(max-width: 767px) 85vw, 27vw" />
         </a>
       </section>
       <section className="profile-employment" aria-labelledby="experience-title">
