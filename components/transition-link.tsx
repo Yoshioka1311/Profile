@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { ComponentProps } from "react";
+import { isSameDestination } from "@/lib/navigation";
 import { usePageTransition } from "./page-transition-provider";
 
 type TransitionLinkProps = Omit<ComponentProps<typeof Link>, "href" | "onNavigate"> & {
@@ -12,6 +13,10 @@ type TransitionLinkProps = Omit<ComponentProps<typeof Link>, "href" | "onNavigat
 export function TransitionLink({ href, transitionTitle, replace, scroll, ...props }: TransitionLinkProps) {
   const { navigate } = usePageTransition();
   return <Link {...props} href={href} replace={replace} scroll={scroll} onNavigate={(event) => {
+    if (isSameDestination(href, window.location.href)) {
+      event.preventDefault();
+      return;
+    }
     if (navigate(href, { title: transitionTitle, replace, scroll })) event.preventDefault();
   }} />;
 }

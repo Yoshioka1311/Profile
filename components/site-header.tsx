@@ -57,16 +57,16 @@ export function SiteHeader({ locale }: { locale: Locale }) {
     <>
       <header className="site-header">
         <div className="container-wide header-inner">
-          <Link id="site-wordmark" href="/" className="wordmark" aria-current={pathname === "/" ? "page" : undefined}>
-            {site.brand}
-          </Link>
+          {pathname === "/"
+            ? <span id="site-wordmark" className="wordmark" aria-current="page">{site.brand}</span>
+            : <Link id="site-wordmark" href="/" className="wordmark">{site.brand}</Link>}
           <nav className="desktop-nav" aria-label={labels.nav.label}>
-            {navigation.map(({ href, key, folder }) => (
-              <Link key={href} href={href} className="folder-link" aria-current={currentLocation(href)}>
-                <FolderGlyph index={folder} />
-                <span className="folder-label">{labels.nav[key]}<span aria-hidden="true">↗</span></span>
-              </Link>
-            ))}
+            {navigation.map(({ href, key, folder }) => {
+              const content = <><FolderGlyph index={folder} /><span className="folder-label">{labels.nav[key]}{pathname === href ? null : <span aria-hidden="true">↗</span>}</span></>;
+              return pathname === href
+                ? <span key={href} className="folder-link" aria-current="page">{content}</span>
+                : <Link key={href} href={href} className="folder-link" aria-current={currentLocation(href)}>{content}</Link>;
+            })}
           </nav>
           <div className="header-controls">
             <LanguageSwitcher locale={locale} />
@@ -108,11 +108,9 @@ export function SiteHeader({ locale }: { locale: Locale }) {
             {navigation.map(({ href, key, folder }, index) => (
               <div key={href} className="menu-link-mask">
                 <m.div initial={false} animate={{ y: open ? 0 : "110%", opacity: open ? 1 : 0 }} transition={{ duration: reduced ? 0 : 0.8, delay: open && !reduced ? index * 0.08 : 0, ease: [0.16, 1, 0.3, 1] }}>
-                  <Link href={href} className="mobile-nav-link" aria-current={currentLocation(href)} onClick={closeMenu}>
-                    <FolderGlyph index={folder} />
-                    <span className="mobile-folder-label">{labels.nav[key]}</span>
-                    <span className="menu-link-arrow" aria-hidden="true">↗</span>
-                  </Link>
+                  {pathname === href
+                    ? <span className="mobile-nav-link" aria-current="page"><FolderGlyph index={folder} /><span className="mobile-folder-label">{labels.nav[key]}</span></span>
+                    : <Link href={href} className="mobile-nav-link" aria-current={currentLocation(href)} onClick={closeMenu}><FolderGlyph index={folder} /><span className="mobile-folder-label">{labels.nav[key]}</span><span className="menu-link-arrow" aria-hidden="true">↗</span></Link>}
                 </m.div>
               </div>
             ))}
