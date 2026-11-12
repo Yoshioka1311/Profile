@@ -52,8 +52,8 @@ export const site = {
     },
   ],
   socials: {
-    github: "[GITHUB]",
-    linkedin: "[LINKEDIN]",
+    github: "https://github.com/Yoshioka1311",
+    linkedin: "https://www.linkedin.com/in/pratchaya-phusodnil/",
     email: "pratchayaphusodnil@gmail.com",
     other: "[OTHER]",
   },
