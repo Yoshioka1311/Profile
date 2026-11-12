@@ -7,7 +7,7 @@ import type { Locale } from "@/data/content";
 const sessionKey = "profile-intro-seen-v1";
 
 export function Preloader({ name, locale }: { name: string; locale: Locale }) {
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(true);
   const attempted = useRef(false);
   useScrollLock(active);
 
@@ -16,13 +16,15 @@ export function Preloader({ name, locale }: { name: string; locale: Locale }) {
     const frame = requestAnimationFrame(() => {
       attempted.current = true;
       try {
-        if (sessionStorage.getItem(sessionKey)) return;
+        if (sessionStorage.getItem(sessionKey)) {
+          setActive(false);
+          return;
+        }
         sessionStorage.setItem(sessionKey, "true");
       } catch {
         // The intro still completes when the browser blocks session storage.
       }
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || document.hidden) return;
-      setActive(true);
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || document.hidden) setActive(false);
     });
     return () => cancelAnimationFrame(frame);
   }, []);

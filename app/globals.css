@@ -213,6 +213,7 @@ html[lang="th"] {
   .route-curtain-title { max-width: 100%; color: var(--ink); font-family: var(--font-display-active); font-size: clamp(3rem, 9vw, 8rem); line-height: 1.3; letter-spacing: -0.025em; overflow-wrap: anywhere; text-wrap: balance; }
   :lang(th) .route-curtain-title { line-height: 1.5; letter-spacing: 0; }
   .preloader { position: fixed; inset: 0; z-index: var(--z-preloader); display: grid; place-items: center; background: var(--bg); color: var(--ink); animation: intro-lift 620ms var(--ease-transition) 680ms forwards; }
+  html[data-intro-seen="true"] .preloader { display: none; }
   .preloader-inner { width: min(80%, 45rem); }
   .preloader-name { display: flex; flex-wrap: wrap; justify-content: center; font-family: var(--font-display-active); font-size: clamp(2rem, 6vw, 5rem); line-height: 1.5; }
   .preloader-letter-mask { display: inline-block; overflow: hidden; }

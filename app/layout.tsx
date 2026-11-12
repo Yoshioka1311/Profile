@@ -7,6 +7,7 @@ import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Preloader } from "@/components/preloader";
+import Script from "next/script";
 import { CustomCursor } from "@/components/custom-cursor";
 import { PageTransitionProvider } from "@/components/page-transition-provider";
 import "./globals.css";
@@ -23,8 +24,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const locale = await getLocale();
 
   return (
-    <html lang={locale} className={`${displayFont.variable} ${bodyFont.variable} ${thaiFont.variable}`}>
+    <html lang={locale} className={`${displayFont.variable} ${bodyFont.variable} ${thaiFont.variable}`} suppressHydrationWarning>
       <body>
+        <Script id="intro-visibility" strategy="beforeInteractive">
+          {`try{if(sessionStorage.getItem("profile-intro-seen-v1")||window.matchMedia("(prefers-reduced-motion: reduce)").matches||document.hidden)document.documentElement.dataset.introSeen="true"}catch{}`}
+        </Script>
         <SmoothScrollProvider>
           <PageTransitionProvider locale={locale}>
           <div id="site-shell">

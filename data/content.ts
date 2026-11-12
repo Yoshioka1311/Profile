@@ -55,7 +55,6 @@ export const site = {
     github: "https://github.com/Yoshioka1311",
     linkedin: "https://www.linkedin.com/in/pratchaya-phusodnil/",
     email: "pratchayaphusodnil@gmail.com",
-    other: "[OTHER]",
   },
 } satisfies {
   defaultLocale: Locale;
@@ -77,7 +76,7 @@ export const site = {
     role: Translated<string>;
     description: Translated<string>;
   }[];
-  socials: Record<"github" | "linkedin" | "email" | "other", string>;
+  socials: Record<"github" | "linkedin" | "email", string>;
 };
 
 export const languageOptions = [

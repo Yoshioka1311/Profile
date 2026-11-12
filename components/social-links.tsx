@@ -6,7 +6,6 @@ export function SocialLinks({ locale, className }: { locale: Locale; className: 
   const links = [
     { kind: "github", label: "GitHub", value: site.socials.github },
     { kind: "linkedin", label: "LinkedIn", value: site.socials.linkedin },
-    { kind: "other", label: locale === "th" ? "ช่องทางอื่น" : "Other", value: site.socials.other },
   ] as const;
 
   return <ul className={className} aria-label={copy[locale].footer.socials}>
